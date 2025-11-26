@@ -7,7 +7,7 @@
 # when creating the bunlde file to be imported into OrcaSlicer.
 #
 # This script will accept a directory path as an argument (defaults to working directory).
-# Each folder in that directory represents a "bundle" that can be imported.
+# Each folder in that directory represents a "bundle" that can be imported (may also specify a bundle directly).
 # Each bundle contains a bundle_structure.json file and one or more folders, named for a printer vendor.
 # Each of these folders contains json files defining filament presets for printers by this vendor.
 #
@@ -22,8 +22,45 @@
 
 set -euo pipefail
 IFS=$'\n\t'
-baseDir="${1:-.}"
-cd "${baseDir}"
+
+# parameter handling:
+unset bundleDir
+unset keepOutputs
+
+opts=$(getopt -o d:k -l dir:,keep,no-keep -n "$(basename "$0")" -- "$@") || exit 1
+eval set -- "$opts"
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -d|--dir)
+            bundleDir="$2"
+            shift 2
+            ;;
+        -k|--keep)
+            keepOutputs=true
+            shift
+            ;;
+        --no-keep)
+            unset keepOutputs
+            shift
+            ;;
+        --)
+            shift
+            ;;
+        *)
+            # if --base-dir was not provided, user the first positional argument as bundleDir:
+            if [[ -z "${bundleDir:-}" ]]; then
+                bundleDir="$1"
+                shift
+                continue
+            fi
+            echo "Error: Unknown option '$1'" >&2
+            exit 1
+            ;;
+    esac
+done
+## fall backl to current working directory if no dir was provided:
+bundleDir="${bundleDir:-$(pwd)}"
 
 # ensure we have access to jq
 if ! command -v jq &> /dev/null; then
@@ -39,8 +76,13 @@ if ! command -v jq &> /dev/null; then
     echo "Error: jq is not installed or not in PATH. You may need to open a new terminal and/or add the location to PATH after setup!"
     exit 1
 fi
+# abort if 7z is not available
+if ! command -v 7z &> /dev/null; then
+    echo "Error: 7z is not installed or not in PATH. Please install 7-Zip or p7zip and ensure 7z command is available in PATH." >&2
+    exit 1
+fi
 
-addToBundle() {
+addToBundleStructure() {
     # printer_vendor key contains a list of objects with a vendor key and a filament_path list.
     # Add it to the list where vendor equals the current vendor folder name.
     # Create one where necessary.
@@ -50,87 +92,92 @@ addToBundle() {
     
     if vendorObject="$(jq -e --arg vendor "$vendorName" '.printer_vendor[] | select(.vendor == $vendor)' "${structureFile}" 2> /dev/null)"; then
         if ! printf '%s' "${vendorObject}" | jq -e --arg path "${filamentPath}" 'any(.filament_path[]; . == $path)' &> /dev/null; then
-            jq --arg vendor "$vendorName" --arg path "${filamentPath}" \
+            jq --arg vendor "$vendorName" --arg path "${filamentPath}" --indent 4 \
                 '(.printer_vendor[] | select(.vendor == $vendor) .filament_path) += [$path]' \
                 "${structureFile}" > "/tmp/bundle_structure.json" || return 1
             mv "/tmp/bundle_structure.json" "${structureFile}"
         fi
     else
-        jq --arg vendor "$vendorName" --arg path "${filamentPath}" \
+        jq --arg vendor "$vendorName" --arg path "${filamentPath}" --indent 4 \
             '.printer_vendor += [{"vendor": $vendor, "filament_path": [$path]}]' \
             "${structureFile}" > "/tmp/bundle_structure.json" || return 1
         mv "/tmp/bundle_structure.json" "${structureFile}"
     fi
 }
 
+# Check if given directory itself is a bundle or _containing_ bundles:
+if ! [ -f "${bundleDir}/bundle_structure.json" ]; then
+    # Iterate over subdirectories and process each as a bundle
+    declare -i failures=0
+    for actualBundleDir in "${bundleDir}"/*/ ; do
+        [ -d "${actualBundleDir}" ] || continue
+        # Recursively call script for subdirectories, preserving parameters:
+        bash -cx '"$@"' -- bash "$0" -d "${actualBundleDir}" ${keepOutputs:+--keep} || failures+=1
+    done
+    exit $failures
+fi
 
-# Process each bundle folder
-for bundleDir in */ ; do
-    [ -d "${bundleDir}" ] || continue
-    bundleName="$(basename "${bundleDir}")"
-    structureFile="${bundleDir}/bundle_structure.json"
-    # Process each vendor folder in the bundle
-    for vendorDir in "${bundleDir}"/*/ ; do
-        [ -d "${vendorDir}" ] || continue
-        vendorName="$(basename "${vendorDir}")"
+# Process the given bundle folder
+bundleName="$(basename "${bundleDir}")"
+structureFile="${bundleDir}/bundle_structure.json"
+# Process each vendor folder in the bundle
+for vendorDir in "${bundleDir}"/*/ ; do
+    [ -d "${vendorDir}" ] || continue
+    vendorName="$(basename "${vendorDir}")"
 
-        # Process each inheritence folder in the vendor folder
-        for inheritDir in "${vendorDir}"*/ ; do
-            [ -d "${inheritDir}" ] || continue
-            baseFile="${inheritDir}/base.json"
-            if [ ! -f "${baseFile}" ]; then
-                echo "Warning: No base.json found in ${inheritDir}, skipping." >&2
+    # Process each inheritence folder in the vendor folder
+    for inheritDir in "${vendorDir}"*/ ; do
+        [ -d "${inheritDir}" ] || continue
+        baseFile="${inheritDir}/base.json"
+        if [ ! -f "${baseFile}" ]; then
+            echo "Warning: No base.json found in ${inheritDir}, skipping." >&2
+            continue
+        fi
+
+        # Combine base file with each other preset file in the inheritence folder
+        for presetFile in "${inheritDir}"*.json; do
+            presetName="$(basename "${presetFile}")"
+            outputFile="${vendorDir}/${presetName}"
+            # skip base.json itself
+            [ "${presetName}" != "base.json" ] || continue
+            echo "Combining preset file '${presetFile}' with base..."
+            # combine content of both files.
+            # keys specified by the inheriting file should overwrite those in the base file,
+            # EXCEPT for "inherits"! This key should be removed from inheriting side first.
+            jq -s --indent 4 '.[0] * (.[1] | del(.inherits))' "${baseFile}" "${presetFile}" > "${outputFile}" || {
+                echo "Error combining ${baseFile} and ${presetFile}" >&2
                 continue
-            fi
-
-            # Combine base file with each other preset file in the inheritence folder
-            for presetFile in "${inheritDir}"*.json; do
-                presetName="$(basename "${presetFile}")"
-                outputFile="${vendorDir}/${presetName}"
-                # skip base.json itself
-                [ "${presetName}" != "base.json" ] || continue
-                echo "Combining preset file '${presetFile}' with base..."
-                # combine content of both files.
-                # keys specified by the inheriting file should overwrite those in the base file,
-                # EXCEPT for "inherits"! This key should be removed from inheriting side first.
-                jq -s '.[0] * (.[1] | del(.inherits))' "${baseFile}" "${presetFile}" > "${outputFile}" || {
-                    echo "Error combining ${baseFile} and ${presetFile}" >&2
-                    continue
-                }
-                # make sure this file is listed in bundle_structure.json:
-                addToBundle "${structureFile}" "${vendorName}" "${vendorName}/${presetName}" || {
-                    echo "Error adding ${outputFile} to bundle_structure.json" >&2
-                    continue
-                }
-            done
+            }
+            # make sure this file is listed in bundle_structure.json:
+            addToBundleStructure "${structureFile}" "${vendorName}" "${vendorName}/${presetName}" || {
+                echo "Error adding ${outputFile} to bundle_structure.json" >&2
+                continue
+            }
         done
     done
+done
 
-    # create the bundle as a zip archive (custom .orca_filament extension)
-    rm "${baseDir}/${bundleName}.zip" 2> /dev/null || true
-    if command -v zip >/dev/null 2>&1; then
-        (cd "${bundleDir}" && zip -r -q "${baseDir}/${bundleName}.zip" .) \
-        || { echo "Error: Failed to create zip archive using zip." >&2 ; continue; }
-    elif command -v pwsh >/dev/null 2>&1 || command -v powershell >/dev/null 2>&1; then
-        if command -v pwsh >/dev/null 2>&1; then
-            pwsh -NoProfile -Command "Compress-Archive -Path '${bundleDir}*' -DestinationPath '${baseDir}/${bundleName}.zip' -Force" \
-            || { echo "Error: Failed to create zip archive using PowerShell Compress-Archive." >&2 ; continue; }
-        else
-            powershell -NoProfile -Command "Compress-Archive -Path '${bundleDir}\\*' -DestinationPath '${baseDir}\\${bundleName}.zip' -Force" \
-            || { echo "Error: Failed to create zip archive using PowerShell Compress-Archive." >&2 ; continue; }
-        fi
-    else
-        echo "Error: neither 'zip' nor PowerShell Compress-Archive is available to create zip files. Please install 'zip' or PowerShell." >&2
-        exit 1
-    fi
-    # at least powershell refuses to create a zip archive with a different extension, so enforce the correct extension now:
-    mv "${baseDir}/${bundleName}.zip" "${baseDir}/${bundleName}.orca_filament" \
-    || echo "Error: Failed to rename zip archive to .orca_filament extension." >&2
+# create the bundle as a zip archive (custom .orca_filament extension)
+createBundleArchive() {
+    local bundleDir="${1:?must provide bundle directory}"
+    local bundleName="${2:?must provide bundle name}"
+    local outputDir="${3:?must provide output directory}"
+    local bundleZip="${outputDir}/${bundleName}.orca_filament"
 
+    printf "Creating bundle archive for '%s'...\n" "${bundleName}"
+    rm "${bundleZip}" 2> /dev/null || true
+    7z a -tzip -mx=2 "${bundleZip}" "${bundleDir}/." >/dev/null || { echo "Error: Failed to create zip archive." >&2; return 1; }
+}
+declare -i failed=0
+createBundleArchive "${bundleDir}" "${bundleName}" "$(dirname "${bundleDir}")" || failed=1 # don't wuit immediately on errors, clean up outputs anyway
+
+
+if [ -z "${keepOutputs:-}" ]; then
     # once the preset file is created, clean up the generated files in the bundle folder:
     # for each json file in a subfolder of a vendorDir, remove the file of that name from the vendorDir itself
     # (we do not remove them freom the bundle structure though, that part is not crucial unless a filament is deleted,
     # in which case we expect the one who deletes it to also change the bundle_structure)
+    printf "Cleaning up generated preset files in bundle '%s'...\n" "${bundleName}"
     for vendorDir in "${bundleDir}"/*/ ; do
         [ -d "${vendorDir}" ] || continue
         for inheritDir in "${vendorDir}"*/ ; do
@@ -142,4 +189,6 @@ for bundleDir in */ ; do
             done
         done
     done
-done
+fi
+
+exit $((failed))

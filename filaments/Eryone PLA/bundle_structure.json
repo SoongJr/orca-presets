@@ -1,13 +1,13 @@
 {
-  "bundle_id": "offline_Eryone PLA Matte_20251124155659",
-  "bundle_type": "filament config bundle",
-  "filament_name": "Eryone PLA Matte",
-  "printer_vendor": [
-    {
-      "filament_path": [
-      ],
-      "vendor": "Creality"
-    }
-  ],
-  "version": ""
+    "bundle_id": "offline_Eryone PLA Matte_20251124155659",
+    "bundle_type": "filament config bundle",
+    "filament_name": "Eryone PLA Matte",
+    "printer_vendor": [
+        {
+            "filament_path": [
+            ],
+            "vendor": "Creality"
+        }
+    ],
+    "version": ""
 }
