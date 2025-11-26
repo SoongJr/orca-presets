@@ -1,0 +1,238 @@
+{
+    "adaptive_bed_mesh_margin": "0",
+    "auxiliary_fan": "0",
+    "bbl_use_printhost": "0",
+    "bed_custom_model": "",
+    "bed_custom_texture": "",
+    "bed_exclude_area": [
+        "0x0"
+    ],
+    "bed_mesh_max": "99999,99999",
+    "bed_mesh_min": "-99999,-99999",
+    "bed_mesh_probe_distance": "50,50",
+    "before_layer_change_gcode": ";BEFORE_LAYER_CHANGE\n;[layer_z]\nG92 E0\n",
+    "best_object_pos": "0.5,0.5",
+    "change_extrusion_role_gcode": "",
+    "change_filament_gcode": "M600",
+    "cooling_tube_length": "5",
+    "cooling_tube_retraction": "91.5",
+    "default_bed_type": "",
+    "default_filament_profile": [
+        "Eryone PLA Matte @Creality Ender-3 Pro 0.4 brass nozzle"
+    ],
+    "default_print_profile": "0.20 Medium Quality @Creality Ender-3 Pro 0.4 brass nozzle",
+    "deretraction_speed": [
+        "40"
+    ],
+    "disable_m73": "0",
+    "emit_machine_limits_to_gcode": "1",
+    "enable_filament_ramming": "0",
+    "enable_long_retraction_when_cut": "0",
+    "extra_loading_move": "-2",
+    "extruder_clearance_height_to_lid": "25",
+    "extruder_clearance_height_to_rod": "25",
+    "extruder_clearance_radius": "47",
+    "extruder_colour": [
+        "#FCE94F"
+    ],
+    "extruder_offset": [
+        "0x0"
+    ],
+    "fan_kickstart": "0",
+    "fan_speedup_overhangs": "1",
+    "fan_speedup_time": "0",
+    "from": "User",
+    "gcode_flavor": "marlin2",
+    "head_wrap_detect_zone": [],
+    "high_current_on_filament_swap": "0",
+    "host_type": "octoprint",
+    "inherits": "Creality Ender-3 Pro 0.4 nozzle",
+    "is_custom_defined": "0",
+    "layer_change_gcode": "",
+    "long_retractions_when_cut": [
+        "0"
+    ],
+    "machine_end_gcode": ";;; custom code:\nG91 ;Relative positioning\nG1 E-2 X-2 Y2 F2700 ;Retract and wipe out\nG90 ;Absolute positioning\n\n\n;;; original (just commented):\n{if max_layer_z < printable_height}G1 Z{z_offset+min(max_layer_z+2, printable_height)} F600 ; Move print head up{endif}\nG1 X5 Y{print_bed_max[1]*0.8} F{travel_speed*60} ; present print\n;{if max_layer_z < printable_height-10}G1 Z{z_offset+min(max_layer_z+70, printable_height-10)} F600 ; Move print head further up{endif}\n;{if max_layer_z < max_print_height*0.6}G1 Z{printable_height*0.6} F600 ; Move print head further up{endif}\nM140 S0 ; turn off heatbed\nM104 S0 ; turn off temperature\nM107 ; turn off fan\nM84 X Y E ; disable motors",
+    "machine_load_filament_time": "0",
+    "machine_max_acceleration_e": [
+        "5000",
+        "5000"
+    ],
+    "machine_max_acceleration_extruding": [
+        "500",
+        "500"
+    ],
+    "machine_max_acceleration_retracting": [
+        "1000",
+        "1000"
+    ],
+    "machine_max_acceleration_travel": [
+        "1500",
+        "1250"
+    ],
+    "machine_max_acceleration_x": [
+        "450",
+        "450"
+    ],
+    "machine_max_acceleration_y": [
+        "450",
+        "450"
+    ],
+    "machine_max_acceleration_z": [
+        "100",
+        "100"
+    ],
+    "machine_max_jerk_e": [
+        "5",
+        "5"
+    ],
+    "machine_max_jerk_x": [
+        "8",
+        "8"
+    ],
+    "machine_max_jerk_y": [
+        "8",
+        "8"
+    ],
+    "machine_max_jerk_z": [
+        "0.4",
+        "0.4"
+    ],
+    "machine_max_junction_deviation": [
+        "0",
+        "0"
+    ],
+    "machine_max_speed_e": [
+        "60",
+        "60"
+    ],
+    "machine_max_speed_x": [
+        "500",
+        "500"
+    ],
+    "machine_max_speed_y": [
+        "500",
+        "500"
+    ],
+    "machine_max_speed_z": [
+        "10",
+        "10"
+    ],
+    "machine_min_extruding_rate": [
+        "0",
+        "0"
+    ],
+    "machine_min_travel_rate": [
+        "0",
+        "0"
+    ],
+    "machine_pause_gcode": "M25",
+    "machine_start_gcode": "G90 ; use absolute coordinates\nM83 ; extruder relative mode\nM140 S[bed_temperature_initial_layer_single] ; set final bed temp\nM104 S150 ; set temporary nozzle temp to prevent oozing during homing\nG4 S10 ; allow partial nozzle warmup\n;;; original: G28 ; home all axis\n;;; original: G1 Z50 F240\n;;; original: G1 X2 Y10 F3000\nM104 S[nozzle_temperature_initial_layer] ; set final nozzle temp\nM190 S[bed_temperature_initial_layer_single] ; wait for bed temp to stabilize\nM109 S[nozzle_temperature_initial_layer] ; wait for nozzle temp to stabilize\nG28 ;;; custom ; home all axis\n\nG92 Z-0.5 ;;; custom ; soft z-offset, waiting for release of https://github.com/OrcaSlicer/OrcaSlicer/pull/11011\n\nG1 X4 F1500 ;;; custom\nG1 Z0.28 F240\nG92 E0\nG1 E15 ;;; custom\nG92 E0\nG1 Y70 E5 F1500 ; prime the nozzle\nG1 X4.5 F5000\nG92 E0\nG1 Y35 E2.5 F1200 ; prime the nozzle\nG92 E0",
+    "machine_tool_change_time": "0",
+    "machine_unload_filament_time": "0",
+    "manual_filament_change": "1",
+    "max_layer_height": [
+        "0.42"
+    ],
+    "max_resonance_avoidance_speed": "120",
+    "min_layer_height": [
+        "0.08"
+    ],
+    "min_resonance_avoidance_speed": "70",
+    "name": "Creality Ender-3 Pro 0.4 brass nozzle",
+    "nozzle_diameter": [
+        "0.4"
+    ],
+    "nozzle_height": "2.5",
+    "nozzle_hrc": "0",
+    "nozzle_type": "brass",
+    "nozzle_volume": "0",
+    "parking_pos_retraction": "92",
+    "pellet_modded_printer": "0",
+    "preferred_orientation": "0",
+    "printable_area": [
+        "0x0",
+        "240x0",
+        "240x240",
+        "0x240"
+    ],
+    "printable_height": "250",
+    "printer_model": "Creality Ender-3 Pro",
+    "printer_notes": "",
+    "printer_settings_id": "Creality Ender-3 Pro 0.4 brass nozzle",
+    "printer_structure": "i3",
+    "printer_technology": "FFF",
+    "printer_variant": "0.4",
+    "printhost_authorization_type": "key",
+    "printhost_ssl_ignore_revoke": "0",
+    "printing_by_object_gcode": "",
+    "purge_in_prime_tower": "1",
+    "resonance_avoidance": "0",
+    "retract_before_wipe": [
+        "70%"
+    ],
+    "retract_length_toolchange": [
+        "1"
+    ],
+    "retract_lift_above": [
+        "0"
+    ],
+    "retract_lift_below": [
+        "0"
+    ],
+    "retract_lift_enforce": [
+        "All Surfaces"
+    ],
+    "retract_restart_extra": [
+        "0"
+    ],
+    "retract_restart_extra_toolchange": [
+        "0"
+    ],
+    "retract_when_changing_layer": [
+        "0"
+    ],
+    "retraction_distances_when_cut": [
+        "18"
+    ],
+    "retraction_length": [
+        "4"
+    ],
+    "retraction_minimum_travel": [
+        "2"
+    ],
+    "retraction_speed": [
+        "60"
+    ],
+    "scan_first_layer": "0",
+    "silent_mode": "0",
+    "single_extruder_multi_material": "1",
+    "support_air_filtration": "0",
+    "support_chamber_temp_control": "0",
+    "support_multi_bed_types": "0",
+    "template_custom_gcode": "",
+    "thumbnails": "",
+    "thumbnails_format": "PNG",
+    "time_cost": "0",
+    "time_lapse_gcode": "",
+    "travel_slope": [
+        "3"
+    ],
+    "upward_compatible_machine": [],
+    "use_firmware_retraction": "0",
+    "use_relative_e_distances": "1",
+    "wipe": [
+        "1"
+    ],
+    "wipe_distance": [
+        "1"
+    ],
+    "z_hop": [
+        "0.4"
+    ],
+    "z_hop_types": [
+        "Normal Lift"
+    ],
+    "z_offset": "0",
+    "version": "2.3.1.10"
+}

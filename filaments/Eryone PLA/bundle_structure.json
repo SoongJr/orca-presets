@@ -1,0 +1,19 @@
+{
+    "bundle_id": "offline_Eryone PLA Matte_20251124155659",
+    "bundle_type": "filament config bundle",
+    "filament_name": "Eryone PLA Matte",
+    "printer_vendor": [
+        {
+            "filament_path": [
+                "Creality/Eryone PLA Matte @Creality Ender-3 Pro 0.2 brass nozzle.json",
+                "Creality/Eryone PLA Matte @Creality Ender-3 Pro 0.4 brass nozzle.json",
+                "Creality/Eryone PLA Matte @Creality Ender-3 Pro 0.8 brass nozzle.json",
+                "Creality/Eryone PLA Matte Dual-Color @Creality Ender-3 Pro 0.2 brass nozzle.json",
+                "Creality/Eryone PLA Matte Dual-Color @Creality Ender-3 Pro 0.4 brass nozzle.json",
+                "Creality/Eryone PLA Matte Dual-Color @Creality Ender-3 Pro 0.8 brass nozzle.json"
+            ],
+            "vendor": "Creality"
+        }
+    ],
+    "version": ""
+}

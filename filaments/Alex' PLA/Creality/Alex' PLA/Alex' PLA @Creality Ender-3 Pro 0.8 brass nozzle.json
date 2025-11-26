@@ -1,0 +1,12 @@
+{
+    "inherits": "Alex' PLA @base",
+    "name": "Alex' PLA @Creality Ender-3 Pro 0.8 brass nozzle",
+    "filament_settings_id": [ "Alex' PLA @Creality Ender-3 Pro 0.8 brass nozzle" ],
+    "filament_id": "ALEX_013",
+    "compatible_printers_condition": "nozzle_diameter[0]==0.8 or nozzle_diameter[1]==0.8 or nozzle_diameter[2]==0.8 or nozzle_diameter[3]==0.8",
+
+
+
+    "instantiation": "true",
+    "version": "2.3.1.10"
+}
