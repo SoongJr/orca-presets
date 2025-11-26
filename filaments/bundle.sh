@@ -36,12 +36,7 @@ if ! command -v jq &> /dev/null; then
     fi
 fi
 if ! command -v jq &> /dev/null; then
-    echo "Error: jq is not installed or not in PATH. You may need to open a new terminal after setup!"
-    exit 1
-fi
-# ensure we have access to tar (comes built-in with Windows and should be available on all modern Linux...)
-if ! command -v tar &> /dev/null; then
-    echo "Error: tar is not installed or not in PATH. Please install it and try again." >&2
+    echo "Error: jq is not installed or not in PATH. You may need to open a new terminal and/or add the location to PATH after setup!"
     exit 1
 fi
 
@@ -53,18 +48,18 @@ addToBundle() {
     local vendorName="${2:?must provide vendor name}"
     local filamentPath="${3:?must provide filament path}"
     
-    if vendorObject="$(jq -e --arg vendor "$vendorName" 'any(.printer_vendor[]; .vendor == $vendor)' "${structureFile}")"; then
-        if ! printf '%s' "${vendorObject}" | jq -e --arg path "${filamentPath}" 'any(.filament_path[]; . == $path)'; then
+    if vendorObject="$(jq -e --arg vendor "$vendorName" '.printer_vendor[] | select(.vendor == $vendor)' "${structureFile}" 2> /dev/null)"; then
+        if ! printf '%s' "${vendorObject}" | jq -e --arg path "${filamentPath}" 'any(.filament_path[]; . == $path)' &> /dev/null; then
             jq --arg vendor "$vendorName" --arg path "${filamentPath}" \
                 '(.printer_vendor[] | select(.vendor == $vendor) .filament_path) += [$path]' \
-                "${structureFile}" > "${structureFile}.tmp" || return 1
-            mv "${structureFile}.tmp" "${structureFile}"
+                "${structureFile}" > "/tmp/bundle_structure.json" || return 1
+            mv "/tmp/bundle_structure.json" "${structureFile}"
         fi
     else
         jq --arg vendor "$vendorName" --arg path "${filamentPath}" \
             '.printer_vendor += [{"vendor": $vendor, "filament_path": [$path]}]' \
-            "${structureFile}" > "${structureFile}.tmp" || return 1
-        mv "${structureFile}.tmp" "${structureFile}"
+            "${structureFile}" > "/tmp/bundle_structure.json" || return 1
+        mv "/tmp/bundle_structure.json" "${structureFile}"
     fi
 }
 
@@ -90,10 +85,11 @@ for bundleDir in */ ; do
 
             # Combine base file with each other preset file in the inheritence folder
             for presetFile in "${inheritDir}"*.json; do
-                [ "${presetFile}" != "${baseFile}" ] || continue
                 presetName="$(basename "${presetFile}")"
                 outputFile="${vendorDir}/${presetName}"
-                echo "Combining base file '${baseFile}' with preset file '${presetFile}' into '${outputFile}'"
+                # skip base.json itself
+                [ "${presetName}" != "base.json" ] || continue
+                echo "Combining preset file '${presetFile}' with base..."
                 # combine content of both files.
                 # keys specified by the inheriting file should overwrite those in the base file,
                 # EXCEPT for "inherits"! This key should be removed from inheriting side first.
@@ -110,6 +106,40 @@ for bundleDir in */ ; do
         done
     done
 
-    # finally, create the bundle file, a simple "zip" archive with custom extension:
-    tar -cf "${baseDir}/${bundleName}.orca_filament" -C "${bundleDir}" .
+    # create the bundle as a zip archive (custom .orca_filament extension)
+    rm "${baseDir}/${bundleName}.zip" 2> /dev/null || true
+    if command -v zip >/dev/null 2>&1; then
+        (cd "${bundleDir}" && zip -r -q "${baseDir}/${bundleName}.zip" .) \
+        || { echo "Error: Failed to create zip archive using zip." >&2 ; continue; }
+    elif command -v pwsh >/dev/null 2>&1 || command -v powershell >/dev/null 2>&1; then
+        if command -v pwsh >/dev/null 2>&1; then
+            pwsh -NoProfile -Command "Compress-Archive -Path '${bundleDir}*' -DestinationPath '${baseDir}/${bundleName}.zip' -Force" \
+            || { echo "Error: Failed to create zip archive using PowerShell Compress-Archive." >&2 ; continue; }
+        else
+            powershell -NoProfile -Command "Compress-Archive -Path '${bundleDir}\\*' -DestinationPath '${baseDir}\\${bundleName}.zip' -Force" \
+            || { echo "Error: Failed to create zip archive using PowerShell Compress-Archive." >&2 ; continue; }
+        fi
+    else
+        echo "Error: neither 'zip' nor PowerShell Compress-Archive is available to create zip files. Please install 'zip' or PowerShell." >&2
+        exit 1
+    fi
+    # at least powershell refuses to create a zip archive with a different extension, so enforce the correct extension now:
+    mv "${baseDir}/${bundleName}.zip" "${baseDir}/${bundleName}.orca_filament" \
+    || echo "Error: Failed to rename zip archive to .orca_filament extension." >&2
+
+    # once the preset file is created, clean up the generated files in the bundle folder:
+    # for each json file in a subfolder of a vendorDir, remove the file of that name from the vendorDir itself
+    # (we do not remove them freom the bundle structure though, that part is not crucial unless a filament is deleted,
+    # in which case we expect the one who deletes it to also change the bundle_structure)
+    for vendorDir in "${bundleDir}"/*/ ; do
+        [ -d "${vendorDir}" ] || continue
+        for inheritDir in "${vendorDir}"*/ ; do
+            [ -d "${inheritDir}" ] || continue
+            for presetFile in "${inheritDir}"*.json; do
+                presetName="$(basename "${presetFile}")"
+                outputFile="${vendorDir}/${presetName}"
+                rm -f "${outputFile}" 2>/dev/null || true
+            done
+        done
+    done
 done

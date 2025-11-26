@@ -1,12 +1,12 @@
 {
-  "bundle_id": "offline_Anycubic PLA+_20251124155659",
+  "bundle_id": "offline_Alex' PLA_20251124155659",
   "bundle_type": "filament config bundle",
-  "filament_name": "Anycubic PLA+",
+  "filament_name": "Alex' PLA",
   "printer_vendor": [
     {
+      "vendor": "Creality",
       "filament_path": [
-      ],
-      "vendor": "Creality"
+      ]
     }
   ],
   "version": ""
