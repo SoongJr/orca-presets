@@ -6,10 +6,6 @@
         "printer/Creality Ender-3 Pro 0.8 brass nozzle.json"
     ],
     "printer_preset_name": "Creality Ender-3 Pro 0.8 brass nozzle",
-    "process_config": [
-        "process/0.20 Medium Quality 0.8 nozzle.json",
-        "process/0.40 Max Strength 0.8 nozzle.json",
-        "process/0.60 Max Speed 0.8 nozzle.json"
-    ],
+    "process_config": [ ],
     "version": ""
 }

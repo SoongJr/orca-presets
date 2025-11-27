@@ -5,6 +5,9 @@
     "printer_vendor": [
         {
             "filament_path": [
+                "Creality/Anycubic PLA+ @Creality Ender-3 Pro 0.2 brass nozzle.json",
+                "Creality/Anycubic PLA+ @Creality Ender-3 Pro 0.4 brass nozzle.json",
+                "Creality/Anycubic PLA+ @Creality Ender-3 Pro 0.8 brass nozzle.json"
             ],
             "vendor": "Creality"
         }

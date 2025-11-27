@@ -82,6 +82,19 @@ if ! command -v 7z &> /dev/null; then
     exit 1
 fi
 
+# Check if given directory itself is a bundle or _containing_ bundles:
+structureFile="${bundleDir}/bundle_structure.json"
+if ! [ -f "${structureFile}" ]; then
+    # Iterate over subdirectories and process each as a bundle
+    declare -i failures=0
+    for actualBundleDir in "${bundleDir}"/*/ ; do
+        [ -d "${actualBundleDir}" ] || continue
+        # Recursively call script for subdirectories, preserving parameters:
+        bash "$0" -d "${actualBundleDir}" ${keepOutputs:+--keep} || failures+=1
+    done
+    exit $failures
+fi
+
 addToBundleStructure() {
     # printer_vendor key contains a list of objects with a vendor key and a filament_path list.
     # Add it to the list where vendor equals the current vendor folder name.
@@ -105,21 +118,8 @@ addToBundleStructure() {
     fi
 }
 
-# Check if given directory itself is a bundle or _containing_ bundles:
-if ! [ -f "${bundleDir}/bundle_structure.json" ]; then
-    # Iterate over subdirectories and process each as a bundle
-    declare -i failures=0
-    for actualBundleDir in "${bundleDir}"/*/ ; do
-        [ -d "${actualBundleDir}" ] || continue
-        # Recursively call script for subdirectories, preserving parameters:
-        bash -cx '"$@"' -- bash "$0" -d "${actualBundleDir}" ${keepOutputs:+--keep} || failures+=1
-    done
-    exit $failures
-fi
-
 # Process the given bundle folder
 bundleName="$(basename "${bundleDir}")"
-structureFile="${bundleDir}/bundle_structure.json"
 # Process each vendor folder in the bundle
 for vendorDir in "${bundleDir}"/*/ ; do
     [ -d "${vendorDir}" ] || continue

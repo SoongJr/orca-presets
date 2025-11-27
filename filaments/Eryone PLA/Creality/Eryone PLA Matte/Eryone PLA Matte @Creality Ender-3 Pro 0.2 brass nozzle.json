@@ -1,6 +1,6 @@
 {
     "compatible_printers_condition": "nozzle_diameter[0]==0.2 or nozzle_diameter[1]==0.2 or nozzle_diameter[2]==0.2 or nozzle_diameter[3]==0.2",
     "filament_settings_id": [ "Eryone PLA Matte @Creality Ender-3 Pro 0.2 brass nozzle" ],
-    "name": "Eryone PLA Matte @Creality Ender-3 Pro 0.2 brass nozzle",
+    "name": "Eryone PLA Matte",
     "filament_id": "ERYONE_001"
 }

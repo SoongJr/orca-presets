@@ -151,9 +151,9 @@
     "pellet_modded_printer": "0",
     "preferred_orientation": "0",
     "printable_area": [
-        "0x0",
-        "240x0",
-        "240x240",
+        "0x5",
+        "233x5",
+        "233x240",
         "0x240"
     ],
     "printable_height": "250",
