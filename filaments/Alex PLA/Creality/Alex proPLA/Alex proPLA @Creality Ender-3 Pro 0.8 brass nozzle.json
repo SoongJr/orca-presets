@@ -1,8 +1,6 @@
 {
     "nozzle_temperature": [ "230" ],
     "nozzle_temperature_initial_layer": [ "220" ],
-    "filament_retraction_length": [ "2.7" ],
-    "filament_flow_ratio": [ "0.96" ],
 
     "compatible_printers_condition": "nozzle_diameter[0]==0.8 or nozzle_diameter[1]==0.8 or nozzle_diameter[2]==0.8 or nozzle_diameter[3]==0.8",
     "filament_settings_id": [ "Alex' proPLA @Creality Ender-3 Pro 0.8 brass nozzle" ],
