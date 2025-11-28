@@ -166,10 +166,11 @@ createBundleArchive() {
 
     printf "Creating bundle archive for '%s'...\n" "${bundleName}"
     rm "${bundleZip}" 2> /dev/null || true
+    sleep .2s # prevents nextcloud from complaining about file being used by another process
     7z a -tzip -mx=2 "${bundleZip}" "${bundleDir}/." >/dev/null || { echo "Error: Failed to create zip archive." >&2; return 1; }
 }
 declare -i failed=0
-createBundleArchive "${bundleDir}" "${bundleName}" "$(dirname "${bundleDir}")" || failed=1 # don't wuit immediately on errors, clean up outputs anyway
+createBundleArchive "${bundleDir}" "${bundleName}" "$(dirname "$(dirname "${bundleDir}")")" || failed=1 # don't wuit immediately on errors, clean up outputs anyway
 
 
 if [ -z "${keepOutputs:-}" ]; then

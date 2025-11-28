@@ -52,8 +52,9 @@ fi
 # create the bundle as a zip archive, bundling all json files in presetsDir
 printf "Creating Process presets archive...\n"
 cd "${presetsDir}" || { echo "Error: Failed to change directory to '${presetsDir}'." >&2; exit 1; }
-rm "./Process presets.zip" 2> /dev/null || true
-7z a -tzip -mx=2 "./Process presets.zip" "*.json" >/dev/null \
+rm "../Process presets.zip" 2> /dev/null || true
+sleep .2s # prevents nextcloud from complaining about file being used by another process
+7z a -tzip -mx=2 "../Process presets.zip" "*.json" >/dev/null \
     || { echo "Error: Failed to create zip archive." >&2; exit 1; }
 
 exit 0

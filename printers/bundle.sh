@@ -70,12 +70,13 @@ createBundleArchive() {
     local bundleDir="${1:?must provide bundle directory}"
     local bundleName="${2:?must provide bundle name}"
     local outputDir="${3:?must provide output directory}"
-    local bundleZip="${outputDir}/${bundleName}.orca_printer"
 
+    local bundleZip="${outputDir}/${bundleName}.orca_printer"
     printf "Creating bundle archive for '%s'...\n" "${bundleName}"
     rm "${bundleZip}" 2> /dev/null || true
+    sleep .2s # prevents nextcloud from complaining about file being used by another process
     7z a -tzip -mx=2 "${bundleZip}" "${bundleDir}/." >/dev/null || { echo "Error: Failed to create zip archive." >&2; return 1; }
 }
-createBundleArchive "${bundleDir}" "${bundleName}" "$(dirname "${bundleDir}")" || exit 1
+createBundleArchive "${bundleDir}" "${bundleName}" "$(dirname "$(dirname "${bundleDir}")")" || exit 1
 
 exit 0
