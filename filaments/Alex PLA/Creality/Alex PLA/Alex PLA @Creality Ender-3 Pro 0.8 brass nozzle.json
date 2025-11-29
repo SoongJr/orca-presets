@@ -1,4 +1,10 @@
 {
+    "nozzle_temperature_notes": [
+        "we want the nozzle hotter for maximum strength.",
+        "we can also assum the 0.8 nozzle is probably going to be used when strength is paramount,",
+        "as it reduces layer lines (if printed at higher layer heights).",
+        "So for 0.8 nozzle we use a higher temperature:"
+    ],
     "nozzle_temperature": [ "190" ],
 
     "compatible_printers_condition": "nozzle_diameter[0]==0.8 or nozzle_diameter[1]==0.8 or nozzle_diameter[2]==0.8 or nozzle_diameter[3]==0.8",

@@ -24,7 +24,7 @@
     "nozzle_temperature": [ "210" ],
     "nozzle_temperature_initial_layer": [ "215" ],
 
-    "filament_flow_ratio": [ "1.1" ],
+    "filament_flow_ratio": [ "1.05" ],
     "filament_max_volumetric_speed": [ "12" ],
     "filament_retraction_length": [ "3.5" ],
     "filament_retract_restart_extra": [ "0" ],
