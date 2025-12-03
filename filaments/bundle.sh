@@ -59,8 +59,10 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
-## fall backl to current working directory if no dir was provided:
+# fall back to current working directory if no dir was provided:
 bundleDir="${bundleDir:-$(pwd)}"
+# use absolute path for bundleDir:
+bundleDir="$(realpath "${bundleDir}")"
 
 # ensure we have access to jq
 if ! command -v jq &> /dev/null; then
@@ -120,6 +122,7 @@ addToBundleStructure() {
 
 # Process the given bundle folder
 bundleName="$(basename "${bundleDir}")"
+declare -a filesToBundle=("${bundleDir}"/bundle_structure.json)
 # Process each vendor folder in the bundle
 for vendorDir in "${bundleDir}"/*/ ; do
     [ -d "${vendorDir}" ] || continue
@@ -148,6 +151,8 @@ for vendorDir in "${bundleDir}"/*/ ; do
                 echo "Error combining ${baseFile} and ${presetFile}" >&2
                 continue
             }
+            # add the generated file to the list of files to be bundled
+            filesToBundle+=("${outputFile}")
             # make sure this file is listed in bundle_structure.json:
             addToBundleStructure "${structureFile}" "${vendorName}" "${vendorName}/${presetName}" || {
                 echo "Error adding ${outputFile} to bundle_structure.json" >&2
@@ -159,18 +164,19 @@ done
 
 # create the bundle as a zip archive (custom .orca_filament extension)
 createBundleArchive() {
-    local bundleDir="${1:?must provide bundle directory}"
-    local bundleName="${2:?must provide bundle name}"
-    local outputDir="${3:?must provide output directory}"
+    local bundleName="${1:?must provide bundle name}" && shift
+    local outputDir="${1:?must provide output directory}" && shift
+    local -a bundleFiles=("$@")
     local bundleZip="${outputDir}/${bundleName}.orca_filament"
 
     printf "Creating bundle archive for '%s'...\n" "${bundleName}"
     rm "${bundleZip}" 2> /dev/null || true
     sleep .2s # prevents nextcloud from complaining about file being used by another process
-    7z a -tzip -mx=2 "${bundleZip}" "${bundleDir}/." >/dev/null || { echo "Error: Failed to create zip archive." >&2; return 1; }
+    7z a -tzip -mx=2 "${bundleZip}" "${bundleFiles[@]}" \
+        >/dev/null || { echo "Error: Failed to create zip archive." >&2; return 1; }
 }
 declare -i failed=0
-createBundleArchive "${bundleDir}" "${bundleName}" "$(dirname "$(dirname "${bundleDir}")")" || failed=1 # don't wuit immediately on errors, clean up outputs anyway
+createBundleArchive "${bundleName}" "$(dirname "$(dirname "${bundleDir}")")" "${filesToBundle[@]}" || failed=1 # don't wuit immediately on errors, clean up outputs anyway
 
 
 if [ -z "${keepOutputs:-}" ]; then
