@@ -1,0 +1,16 @@
+{
+    "bundle_id": "offline_Eryone TPU Basic_20251124155659",
+    "bundle_type": "filament config bundle",
+    "filament_name": "Eryone TPU Basic",
+    "printer_vendor": [
+        {
+            "filament_path": [
+                "Creality/Eryone TPU Basic @Creality Ender-3 Pro 0.2 brass nozzle.json",
+                "Creality/Eryone TPU Basic @Creality Ender-3 Pro 0.4 brass nozzle.json",
+                "Creality/Eryone TPU Basic @Creality Ender-3 Pro 0.8 brass nozzle.json"
+            ],
+            "vendor": "Creality"
+        }
+    ],
+    "version": ""
+}

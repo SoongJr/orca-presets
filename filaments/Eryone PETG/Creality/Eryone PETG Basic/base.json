@@ -1,0 +1,35 @@
+{
+    "inherits": "Generic PETG @System",
+    "name": "Eryone PETG Basic @base",
+    "filament_settings_id": [ "Eryone PETG Basic @base" ],
+    "filament_id": "ERYONE_100",
+
+    "filament_type": [ "PETG" ],
+    "filament_vendor": [ "Eryone" ],
+    "default_filament_colour": [ "#050505" ],
+    "filament_cost": [ "22" ],
+    "filament_is_support": [ "0" ],
+    "filament_soluble": [ "0" ],
+    "filament_notes": [ "" ],
+
+    "nozzle_temperature_range_low": [ "230" ],
+    "nozzle_temperature_range_high": [ "280" ],
+    "idle_temperature": [ "180" ],
+    "enable_pressure_advance": [ "1" ],
+    "pressure_advance": [ "0.1" ],
+
+    "hot_plate_temp": [ "70" ],
+    "hot_plate_temp_initial_layer": [ "70" ],
+    "nozzle_temperature": [ "240" ],
+    "nozzle_temperature_initial_layer": [ "240" ],
+
+    "filament_flow_ratio": [ "1" ],
+    "filament_max_volumetric_speed": [ "12" ],
+    "filament_retraction_length": [ "5" ],
+    "filament_retract_restart_extra": [ "0" ],
+
+    "from": "User",
+    "is_custom_defined": "0",
+    "compatible_printers_condition": "false",
+    "version": "2.3.1.10"
+}
