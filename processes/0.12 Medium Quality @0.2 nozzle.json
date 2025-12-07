@@ -1,6 +1,6 @@
 {
-    "inherits": "0.12mm Fine @Creality Ender3 Pro 0.2",
-    "name": "0.12 Medium Quality",
+    "inherits": "0.12mm Fine @Creality Ender-3 Pro 0.2 brass nozzle",
+    "name": "0.12 Medium Quality @Creality Ender-3 Pro 0.2 brass nozzle",
     "print_settings_id": "0.12 Medium Quality @Creality Ender-3 Pro 0.2 brass nozzle",
 
     "bottom_shell_layers": "4",
