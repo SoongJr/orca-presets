@@ -1,7 +1,7 @@
 {
     "inherits": "Generic TPU @System",
-    "name": "Eryone TPU Basic @base",
-    "filament_settings_id": [ "Eryone TPU Basic @base" ],
+    "name": "Eryone TPU Basic @custom-base",
+    "filament_settings_id": [ "Eryone TPU Basic @custom-base" ],
     "filament_id": "ERYONE_200",
 
     "filament_type": [ "TPU" ],

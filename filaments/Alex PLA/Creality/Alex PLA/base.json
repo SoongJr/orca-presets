@@ -1,7 +1,7 @@
 {
     "inherits": "Generic PLA @System",
-    "name": "Alex' PLA @base",
-    "filament_settings_id": [ "Alex' PLA @base" ],
+    "name": "Alex' PLA @custom-base",
+    "filament_settings_id": [ "Alex' PLA @custom-base" ],
     "filament_id": "ALEX_000",
 
     "filament_type": [ "PLA" ],

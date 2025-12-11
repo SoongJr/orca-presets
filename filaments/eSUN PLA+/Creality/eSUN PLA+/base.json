@@ -1,7 +1,7 @@
 {
     "inherits": "eSUN PLA+ @base",
-    "name": "eSUN PLA+ @base",
-    "filament_settings_id": [ "eSUN PLA+ @base" ],
+    "name": "eSUN PLA+ @custom-base",
+    "filament_settings_id": [ "eSUN PLA+ @custom-base" ],
     "filament_id": "ESUN_000",
 
     "filament_type": [ "PLA" ],

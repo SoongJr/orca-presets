@@ -1,7 +1,7 @@
 {
     "inherits": "Generic PLA @System",
-    "name": "PowerMedia PLA @base",
-    "filament_settings_id": [ "PowerMedia PLA @base" ],
+    "name": "PowerMedia PLA @custom-base",
+    "filament_settings_id": [ "PowerMedia PLA @custom-base" ],
     "filament_id": "POWERMEDIA_000",
 
     "filament_type": [ "PLA" ],

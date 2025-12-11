@@ -1,7 +1,7 @@
 {
     "inherits": "Generic PETG @System",
-    "name": "Eryone PETG Basic @base",
-    "filament_settings_id": [ "Eryone PETG Basic @base" ],
+    "name": "Eryone PETG Basic @custom-base",
+    "filament_settings_id": [ "Eryone PETG Basic @custom-base" ],
     "filament_id": "ERYONE_100",
 
     "filament_type": [ "PETG" ],

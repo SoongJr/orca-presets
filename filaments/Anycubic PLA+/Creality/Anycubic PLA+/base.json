@@ -1,7 +1,7 @@
 {
     "inherits": "Generic PLA Matte @System",
-    "name": "Anycubic PLA+ @base",
-    "filament_settings_id": [ "Anycubic PLA+ @base" ],
+    "name": "Anycubic PLA+ @custom-base",
+    "filament_settings_id": [ "Anycubic PLA+ @custom-base" ],
     "filament_id": "ANYCUBIC_000",
 
     "filament_type": [ "PLA" ],

@@ -1,7 +1,7 @@
 {
     "inherits": "Generic PLA Matte @System",
-    "name": "Eryone PLA Matte @base",
-    "filament_settings_id": [ "Eryone PLA Matte @base" ],
+    "name": "Eryone PLA Matte @custom-base",
+    "filament_settings_id": [ "Eryone PLA Matte @custom-base" ],
     "filament_id": "ERYONE_000",
 
     "filament_type": [ "PLA" ],
