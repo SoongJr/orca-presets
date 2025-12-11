@@ -15,7 +15,7 @@
     "hole_to_polyhole": "1",
     "initial_layer_infill_speed": "30",
     "initial_layer_line_width": "80%",
-    "initial_layer_print_height": "0.4",
+    "initial_layer_print_height": "0.6",
     "inner_wall_line_width": "110%",
     "inner_wall_speed": "60",
     "internal_solid_infill_line_width": "110%",
