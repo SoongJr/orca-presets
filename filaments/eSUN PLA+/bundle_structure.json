@@ -1,0 +1,16 @@
+{
+    "bundle_id": "offline_eSUN PLA+_20251124155659",
+    "bundle_type": "filament config bundle",
+    "filament_name": "eSUN PLA+",
+    "printer_vendor": [
+        {
+            "filament_path": [
+                "Creality/eSUN PLA+ @Creality Ender-3 Pro 0.2 brass nozzle.json",
+                "Creality/eSUN PLA+ @Creality Ender-3 Pro 0.4 brass nozzle.json",
+                "Creality/eSUN PLA+ @Creality Ender-3 Pro 0.8 brass nozzle.json"
+            ],
+            "vendor": "Creality"
+        }
+    ],
+    "version": ""
+}
