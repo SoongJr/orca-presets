@@ -1,5 +1,5 @@
 {
-    "inherits": "eSUN PLA+ @base",
+    "inherits": "eSUN PLA+ @System",
     "name": "eSUN PLA+ @custom-base",
     "filament_settings_id": [ "eSUN PLA+ @custom-base" ],
     "filament_id": "ESUN_000",
