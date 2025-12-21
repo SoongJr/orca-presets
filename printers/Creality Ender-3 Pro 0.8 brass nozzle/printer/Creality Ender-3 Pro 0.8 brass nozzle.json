@@ -29,8 +29,8 @@
     "enable_filament_ramming": "0",
     "enable_long_retraction_when_cut": "0",
     "extra_loading_move": "-2",
-    "extruder_clearance_height_to_lid": "25",
-    "extruder_clearance_height_to_rod": "25",
+    "extruder_clearance_height_to_lid": "28",
+    "extruder_clearance_height_to_rod": "28",
     "extruder_clearance_radius": "47",
     "extruder_colour": [
         "#FCE94F"
