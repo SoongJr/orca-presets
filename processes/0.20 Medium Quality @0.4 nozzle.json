@@ -36,6 +36,8 @@
     "skirt_height": "1",
     "skirt_speed": "20",
     "slow_down_layers": "2",
+    "small_perimeter_speed": "50%",
+    "small_perimeter_threshold": "2",
     "sparse_infill_line_width": "110%",
     "sparse_infill_pattern": "tpmsfk",
     "sparse_infill_speed": "50",
