@@ -52,7 +52,7 @@
     "long_retractions_when_cut": [
         "0"
     ],
-    "machine_end_gcode": ";;; custom code:\nG91 ;Relative positioning\nG1 E-2 X-2 Y2 F2700 ;Retract and wipe out\nG90 ;Absolute positioning\n\n\n;;; original (just commented):\n{if max_layer_z < printable_height}G1 Z{z_offset+min(max_layer_z+2, printable_height)} F600 ; Move print head up{endif}\nG1 X5 Y{print_bed_max[1]*0.8} F{travel_speed*60} ; present print\n;{if max_layer_z < printable_height-10}G1 Z{z_offset+min(max_layer_z+70, printable_height-10)} F600 ; Move print head further up{endif}\n;{if max_layer_z < max_print_height*0.6}G1 Z{printable_height*0.6} F600 ; Move print head further up{endif}\nM140 S0 ; turn off heatbed\nM104 S0 ; turn off temperature\nM107 ; turn off fan\nM84 X Y E ; disable motors",
+    "machine_end_gcode": ";;; custom code:\nG91 ;Relative positioning\nG1 E-4 X-2 Y2 F2700 ;Retract and wipe out\nG90 ;Absolute positioning\n\n\n;;; original (just commented):\n{if max_layer_z < printable_height}G1 Z{z_offset+min(max_layer_z+2, printable_height)} F600 ; Move print head up{endif}\nG1 X5 Y{print_bed_max[1]*0.8} F{travel_speed*60} ; present print\n;{if max_layer_z < printable_height-10}G1 Z{z_offset+min(max_layer_z+70, printable_height-10)} F600 ; Move print head further up{endif}\n;{if max_layer_z < max_print_height*0.6}G1 Z{printable_height*0.6} F600 ; Move print head further up{endif}\nM140 S0 ; turn off heatbed\nM104 S0 ; turn off temperature\nM107 ; turn off fan\nM84 X Y E ; disable motors",
     "machine_load_filament_time": "0",
     "machine_max_acceleration_e": [
         "5000",
