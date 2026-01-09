@@ -59,6 +59,7 @@
     "top_shell_thickness": "0",
     "top_surface_line_width": "110%",
     "top_surface_pattern": "rectilinear",
+    "travel_speed": "125",
     "tree_support_branch_angle": "50",
     "tree_support_branch_angle_organic": "50",
     "wall_loops": "2",
