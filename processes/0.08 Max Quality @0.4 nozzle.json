@@ -7,6 +7,7 @@
     "bottom_shell_thickness": "1",
     "bottom_surface_pattern": "rectilinear",
     "brim_object_gap": "0.15",
+    "brim_type": "painted",
     "brim_width": "3",
     "bridge_no_support": "1",
     "enable_arc_fitting": "1",

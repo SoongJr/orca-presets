@@ -7,6 +7,7 @@
     "bottom_shell_thickness": "1",
     "bottom_surface_pattern": "rectilinear",
     "brim_object_gap": "0.1",
+    "brim_type": "painted",
     "brim_width": "3",
     "enable_arc_fitting": "1",
     "filename_format": "{plate_name}_{filament_type[initial_tool]}_{layer_height}mm.gcode",
