@@ -5,6 +5,8 @@
     "printer_vendor": [
         {
             "filament_path": [
+                "Creality/Bavafil PLA @Creality Ender-3 Pro 0.4 brass nozzle.json",
+                "Creality/Bavafil PLA @Creality Ender-3 Pro 0.8 brass nozzle.json",
                 "Creality/Bavafil Marble PLA @Creality Ender-3 Pro 0.4 brass nozzle.json",
                 "Creality/Bavafil Marble PLA @Creality Ender-3 Pro 0.8 brass nozzle.json"
             ],
