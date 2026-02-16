@@ -1,0 +1,8 @@
+{
+    "notes": "values fine-tuned specifically for this nozzle size:",
+
+    "compatible_printers_condition": "nozzle_diameter[0]==0.4 or nozzle_diameter[1]==0.4 or nozzle_diameter[2]==0.4 or nozzle_diameter[3]==0.4",
+    "filament_settings_id": [ "Prusament PLA woodfill @Creality Ender-3 Pro 0.4 brass nozzle" ],
+    "name": "Prusament PLA woodfill @Creality Ender-3 Pro 0.4 brass nozzle",
+    "filament_id": "PRUSA_002"
+}

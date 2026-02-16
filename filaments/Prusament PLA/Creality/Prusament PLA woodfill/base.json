@@ -1,0 +1,36 @@
+{
+    "inherits": "Generic PLA @System",
+    "name": "Prusament PLA woodfill @custom-base",
+    "filament_settings_id": [ "Prusament PLA woodfill @custom-base" ],
+    "filament_id": "PRUSA_000",
+
+    "filament_type": [ "PLA" ],
+    "filament_vendor": [ "Prusa Polymers" ],
+    "default_filament_colour": [ "#bb8954" ],
+    "filament_cost": [ "40" ],
+    "filament_density": [ "1.24" ],
+    "filament_is_support": [ "0" ],
+    "filament_soluble": [ "0" ],
+    "filament_notes": [ "" ],
+
+    "nozzle_temperature_range_low": [ "185" ],
+    "nozzle_temperature_range_high": [ "205" ],
+    "idle_temperature": [ "150" ],
+    "enable_pressure_advance": [ "0" ],
+    "pressure_advance": [ "0.02" ],
+
+    "hot_plate_temp": [ "55" ],
+    "hot_plate_temp_initial_layer": [ "60" ],
+    "nozzle_temperature": [ "195" ],
+    "nozzle_temperature_initial_layer": [ "205" ],
+
+    "filament_flow_ratio": [ "1" ],
+    "filament_max_volumetric_speed": [ "15" ],
+    "filament_retraction_length": [ "1.6" ],
+    "filament_retract_restart_extra": [ "0" ],
+
+    "from": "User",
+    "is_custom_defined": "0",
+    "compatible_printers_condition": "false",
+    "version": "2.3.1.10"
+}

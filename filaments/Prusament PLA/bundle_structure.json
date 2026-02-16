@@ -1,0 +1,15 @@
+{
+    "bundle_id": "offline_Prusament PLA_20260216",
+    "bundle_type": "filament config bundle",
+    "filament_name": "Prusament PLA",
+    "printer_vendor": [
+        {
+            "filament_path": [
+                "Creality/Prusament PLA woodfill @Creality Ender-3 Pro 0.4 brass nozzle.json",
+                "Creality/Prusament PLA woodfill @Creality Ender-3 Pro 0.8 brass nozzle.json"
+            ],
+            "vendor": "Creality"
+        }
+    ],
+    "version": ""
+}
