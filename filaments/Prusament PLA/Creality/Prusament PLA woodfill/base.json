@@ -21,7 +21,7 @@
 
     "hot_plate_temp": [ "55" ],
     "hot_plate_temp_initial_layer": [ "60" ],
-    "nozzle_temperature": [ "195" ],
+    "nozzle_temperature": [ "200" ],
     "nozzle_temperature_initial_layer": [ "205" ],
 
     "filament_flow_ratio": [ "1" ],
