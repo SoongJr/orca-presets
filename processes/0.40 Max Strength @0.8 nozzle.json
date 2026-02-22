@@ -67,5 +67,10 @@
     "tree_support_branch_angle": "60",
     "tree_support_branch_angle_organic": "60",
     "wall_loops": "4",
+    "enable_prime_tower": "1",
+    "prime_tower_width": "40",
+    "prime_tower_brim_width": "2",
+    "wipe_tower_max_purge_speed": "50",
+    "wipe_tower_wall_type": "cone",
     "version": "2.3.1.10"
 }
